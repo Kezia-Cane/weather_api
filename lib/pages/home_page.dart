@@ -1,4 +1,6 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_app_api/service/weather_service.dart';
 
@@ -32,6 +34,32 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
     }
   }
 
+  //WEATHER ANIMATIONS CONDITIONS
+
+  String getWeatherAnimation(String? mainCondition) {
+    if (mainCondition == null) return 'assets/sunny.json'; // default sunny
+
+    switch (mainCondition.toLowerCase()) {
+      case 'clouds':
+      case 'mist':
+      case 'smoke':
+      case 'haze':
+      case 'dust':
+      case 'fog':
+        return 'assets/cloud.json';
+      case 'rain':
+      case 'drizzle':
+      case 'shower rain':
+        return 'assets/rain.json';
+      case 'thunderstrom':
+        return 'assets/thunder.json';
+      case 'clear':
+        return 'assets/sunny.json';
+      default:
+        return 'assets/sunny.json';
+    }
+  }
+
   // INIT STATE
   @override
   void initState() {
@@ -48,12 +76,36 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(_weather?.cityName ?? 'Loading city..'),
+            Icon(
+              Icons.location_on,
+              size: 40,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              _weather?.cityName.toUpperCase() ??
+                  'Loading city..'.toUpperCase(),
+              style: GoogleFonts.openSans(
+                  color: Colors.grey,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
 
             // LOTTIE ANIMATION
-            Lottie.asset('assets/thunder.json'),
+            Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
 
-            Text('${_weather?.temparature.round()}°C')
+            SizedBox(
+              height: 30,
+            ),
+
+            Text(
+              '${_weather?.temparature.round()}°C',
+              style: GoogleFonts.openSans(
+                  color: Colors.grey,
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold),
+            )
           ],
         ),
       ),
